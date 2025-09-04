@@ -1,0 +1,183 @@
+# Vertex AI Job Templates for BERT Optimization
+job_templates:
+  bert_baseline:
+    display_name: "BERT Baseline Benchmarking"
+    experiment_type: "baseline"
+    machine_type: "n1-standard-4"
+    gpu_count: 1
+    max_runtime_hours: 1
+    container_uri: "gcr.io/phoenix-project-386/bert-base:latest"
+    estimated_cost: 0.11
+    description: "Week 1 - Establish baseline performance metrics"
+    
+  bert_quantization:
+    display_name: "BERT Quantization Experiments"
+    experiment_type: "quantization"
+    machine_type: "n1-standard-4"
+    gpu_count: 1
+    max_runtime_hours: 3
+    container_uri: "gcr.io/phoenix-project-386/bert-quantization:latest"
+    estimated_cost: 0.32
+    description: "Week 2 - INT8/FP16 quantization optimization"
+    
+  bert_batching:
+    display_name: "BERT Batching Optimization"
+    experiment_type: "batching"
+    machine_type: "n1-standard-4"
+    gpu_count: 1
+    max_runtime_hours: 2.5
+    container_uri: "gcr.io/phoenix-project-386/bert-batching:latest"
+    estimated_cost: 0.26
+    description: "Week 3 - Dynamic batching and throughput optimization"
+    
+  bert_caching:
+    display_name: "BERT Caching & Advanced Optimization"
+    experiment_type: "caching"
+    machine_type: "n1-standard-8"  # More memory for caching experiments
+    gpu_count: 1
+    max_runtime_hours: 4
+    container_uri: "gcr.io/phoenix-project-386/bert-advanced:latest"
+    estimated_cost: 0.42
+    description: "Week 4 - Caching, compilation, and production optimization"
+
+# Default settings
+defaults:
+  project_id: "phoenix-project-386"
+  region: "us-central1"
+  results_bucket: "phoenix-bert-results"
+  staging_bucket: "phoenix-bert-staging"
+  service_account: "vertex-ai-runner@phoenix-project-386.iam.gserviceaccount.com"
+  
+  # Container registry settings
+  container_registry: "gcr.io"
+  base_image: "pytorch/pytorch:2.1.0-cuda11.8-cudnn8-devel"
+
+# Cost controls and budgets
+cost_controls:
+  max_job_cost: 2.00        # USD per job
+  daily_budget: 5.00        # USD per day
+  weekly_budget: 15.00      # USD per week
+  total_project_budget: 50.00  # USD for entire project
+  alert_thresholds: [0.5, 0.8, 0.95]  # Alert at 50%, 80%, 95% of budget
+  
+  # T4 GPU pricing (preemptible)
+  t4_gpu_rate_per_hour: 0.105
+  machine_rates:
+    n1-standard-4: 0.19
+    n1-standard-8: 0.38
+
+# Regional configuration (in order of preference)
+regions:
+  primary: "us-central1"      # 2 T4 GPUs available
+  secondary: 
+    - "us-east1"             # 1 T4 GPU
+    - "us-west1"             # 1 T4 GPU
+  international:
+    - "europe-west2"         # 1 T4 GPU
+    - "europe-west4"         # 1 T4 GPU
+    - "asia-northeast1"      # 1 T4 GPU
+    - "asia-northeast3"      # 1 T4 GPU
+    - "asia-south1"          # 1 T4 GPU
+    - "asia-southeast1"      # 1 T4 GPU
+
+# Experiment scheduling
+scheduling:
+  # Retry configuration
+  max_retries: 2
+  retry_delay_minutes: 5
+  
+  # Timeout settings
+  default_timeout_hours: 2
+  max_timeout_hours: 6
+  
+  # Preemption handling
+  enable_preemptible: true
+  preemption_retry_count: 3
+
+# Results and logging
+results:
+  # Cloud Storage configuration
+  results_bucket: "phoenix-bert-results"
+  results_path_template: "results/{experiment_type}/{job_name}/"
+  
+  # File naming conventions
+  results_file_format: "{job_name}_results.json"
+  logs_file_format: "{job_name}_logs.txt"
+  metrics_file_format: "{job_name}_metrics.json"
+  
+  # Retention policy
+  results_retention_days: 90
+  logs_retention_days: 30
+  
+  # Export formats
+  export_formats: ["json", "csv", "parquet"]
+
+# Container configuration
+containers:
+  # Base container settings
+  base_container:
+    name: "bert-base"
+    tag: "latest"
+    python_version: "3.9"
+    pytorch_version: "2.1.0"
+    cuda_version: "11.8"
+    
+  # Common dependencies
+  common_packages:
+    - "transformers==4.35.0"
+    - "datasets==2.14.0"
+    - "torch-audio==2.1.0"
+    - "google-cloud-storage==2.10.0"
+    - "google-cloud-aiplatform==1.36.0"
+    - "pandas==2.1.0"
+    - "numpy==1.24.0"
+    - "matplotlib==3.7.0"
+    - "seaborn==0.12.0"
+    - "scikit-learn==1.3.0"
+    
+  # Optimization libraries
+  optimization_packages:
+    - "onnxruntime-gpu==1.16.0"
+    - "optimum==1.13.0"
+    - "accelerate==0.23.0"
+
+# Monitoring and alerting
+monitoring:
+  # Job monitoring
+  enable_job_monitoring: true
+  monitoring_interval_seconds: 30
+  
+  # Cost monitoring
+  enable_cost_monitoring: true
+  cost_check_interval_minutes: 15
+  
+  # Performance monitoring
+  enable_performance_monitoring: true
+  collect_gpu_metrics: true
+  collect_memory_metrics: true
+  
+  # Alerting
+  alert_channels:
+    email: "your-email@example.com"
+    # slack_webhook: "https://hooks.slack.com/..."
+  
+  alert_conditions:
+    job_failure: true
+    cost_threshold_exceeded: true
+    job_timeout: true
+    quota_exceeded: true
+
+# Development and testing
+development:
+  # Local testing
+  enable_local_testing: true
+  local_gpu_simulation: false
+  
+  # Dry run mode
+  enable_dry_run: true
+  dry_run_cost_estimation: true
+  
+  # Debug settings
+  debug_mode: false
+  verbose_logging: true
+  save_debug_artifacts: true

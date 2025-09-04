@@ -1,0 +1,1 @@
+# Vertex AI GPU Service for BERT Optimization
