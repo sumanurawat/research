@@ -327,7 +327,7 @@ class ReportGenerator:
     
     def generate_report(self, results: List[PerformanceMetrics], metadata: Dict[str, Any]):
         """Generate clean markdown report with embedded visualizations."""
-        report_file = self.results_dir / "baseline_benchmark_report.md"
+        report_file = self.results_dir / "README.md"
         
         # Create visualization first
         plot_file = self._create_visualizations(results)
@@ -694,10 +694,10 @@ def main():
                 memory_range = [r.gpu_memory_peak_mb for r in category_results if r.gpu_memory_peak_mb > 0]
                 print(f"  Memory Range: {min(memory_range):.1f} - {max(memory_range):.1f} MB")
         
-        print(f"\\n📋 Complete Report: {report_file}")
+        print(f"\\n📋 Results README: {report_file}")
         print(f"📊 Performance Charts: {results_dir / 'performance_analysis.png'}")
         print(f"📁 Raw Data: {results_dir / 'benchmark_data.json'}")
-        print("\\n💡 Tip: Open the report in a markdown viewer that supports images")
+        print("\\n💡 Tip: Browse to results/ folder to see the auto-displaying README")
         print("=" * 80)
         
     except Exception as e:

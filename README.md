@@ -25,9 +25,9 @@ bert-production-optimization/
 │   └── baseline_benchmarking/      # Baseline performance measurement
 │       ├── baseline_benchmark.py   # Main benchmarking script
 │       ├── results/                # Generated reports and data
-│       │   ├── baseline_benchmark_report.md  # Complete report with embedded charts
+│       │   ├── README.md                     # Complete report with linked charts
 │       │   ├── benchmark_data.json           # Raw performance data
-│       │   └── performance_analysis.png      # Standalone chart file
+│       │   └── performance_analysis.png      # Professional visualizations
 │       └── README.md               # Benchmarking documentation
 ├── vertex_gpu_service/             # ☁️ Cloud Infrastructure (Future)
 │   ├── vertex_manager.py           # Vertex AI interface
@@ -50,14 +50,14 @@ cd bert_experiments/baseline_benchmarking
 # Run baseline performance benchmarks
 python baseline_benchmark.py
 
-# View results
-open results/baseline_benchmark_report.md
+# View results (README auto-displays when browsing results folder)
+open results/
 ```
 
 ### Expected Output
 
 The benchmarking script generates:
-- **Complete Report**: `baseline_benchmark_report.md` with linked performance charts
+- **Results README**: `results/README.md` with linked performance charts (auto-displays when browsing)
 - **Performance Charts**: `performance_analysis.png` with comprehensive visualizations
 - **Raw Data**: `benchmark_data.json` with structured performance metrics
 

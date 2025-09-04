@@ -25,9 +25,9 @@ python baseline_benchmark.py
 
 ## Output Files
 
-- `baseline_benchmark_report.md` - **Complete report with linked performance charts**
-- `performance_analysis.png` - **Professional performance visualizations**
-- `benchmark_data.json` - Raw performance data in JSON format
+- `results/README.md` - **Complete report with linked performance charts (auto-displays)**
+- `results/performance_analysis.png` - **Professional performance visualizations**
+- `results/benchmark_data.json` - Raw performance data in JSON format
 
 ## Performance Metrics
 
